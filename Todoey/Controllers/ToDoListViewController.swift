@@ -11,34 +11,15 @@ import UIKit
 class ToDoListViewController: UITableViewController {
     
 var itemArray = [Item]()
-    
-let defaults = UserDefaults.standard
-    
 let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         print (dataFilePath)
+    
         
-        let newItem = Item()
-        newItem.title = "Buy dumplings"
-        itemArray.append(newItem)
-        
-        let newItem2 = Item()
-        newItem2.title = "Go to the beach"
-        itemArray.append(newItem2)
-        
-        let newItem3 = Item()
-        newItem3.title = "Buy ice cream"
-        itemArray.append(newItem3)
-        
-        
-        
-    if let items = defaults.array(forKey: "ToDoListArray") as? [Item] {
-        itemArray = items
-    }
-        // Do any additional setup after loading the view, typically from a nib.
+        loadItems()
     
     }
     
@@ -95,15 +76,11 @@ let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDo
             
                
             }
-            
-            
+        
         
             self.tableView.reloadData()
         
-            
-        }
-        
-        alert.addTextField { (alertTextField) in
+            alert.addTextField { (alertTextField) in
             alertTextField.placeholder = "Create new item"
             textField = alertTextField
             
@@ -125,13 +102,27 @@ func saveItems() {
             
             print("Error encoding item array, \(error)")
             
+    }
+    
+    self.tableView.reloadData()
+            
+    }
+    
+    
+    func loadItems(){
+        if let data = try? Data(contentsOf: dataFilePath!) {
+        let decoder = PropertyListDecoder()
+            do {
+                itemArray =  try decoder.decode([Item].self, from: data)
+    } catch {
+        print("Error decoding item array, \(error)")
+        
+            }
         
     }
-
-
-
-
+        
+        
+    
 }
-
-
+}
 
