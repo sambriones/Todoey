@@ -13,9 +13,13 @@ class ToDoListViewController: UITableViewController {
 var itemArray = [Item]()
     
 let defaults = UserDefaults.standard
+    
+let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        print (dataFilePath)
         
         let newItem = Item()
         newItem.title = "Buy dumplings"
@@ -31,7 +35,7 @@ let defaults = UserDefaults.standard
         
         
         
-      if let items = defaults.array(forKey: "ToDoListArray") as? [Item] {
+    if let items = defaults.array(forKey: "ToDoListArray") as? [Item] {
         itemArray = items
     }
         // Do any additional setup after loading the view, typically from a nib.
@@ -59,11 +63,13 @@ let defaults = UserDefaults.standard
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // print(itemArray[indexPath.row])
+       
         
         itemArray[indexPath.row].done = !itemArray[indexPath.row].done
         
-        tableView.reloadData()
+        saveItems()
+        
+     
         
         tableView.deselectRow(at: indexPath, animated: true)
         
@@ -84,8 +90,14 @@ let defaults = UserDefaults.standard
             
             self.itemArray.append(newItem)
             
-            self.defaults.set(self.itemArray, forKey: "ToDoListArray")
+            self.saveItems()
             
+            
+               
+            }
+            
+            
+        
             self.tableView.reloadData()
         
             
@@ -100,6 +112,20 @@ let defaults = UserDefaults.standard
         
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
+    }
+    
+
+func saveItems() {
+        let encoder = PropertyListEncoder()
+        
+        do {
+            let data = try encoder.encode(itemArray)
+            try data.write(to: dataFilePath!)
+        } catch {
+            
+            print("Error encoding item array, \(error)")
+            
+        
     }
 
 
