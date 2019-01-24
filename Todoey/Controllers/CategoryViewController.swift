@@ -20,9 +20,12 @@ class CategoryViewController: UITableViewController {
         
         loadItems()
         
+       
+        
         
 
     }
+    
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return categoryArray.count
