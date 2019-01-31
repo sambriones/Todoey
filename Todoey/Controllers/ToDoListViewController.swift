@@ -18,7 +18,6 @@ class ToDoListViewController: SwipeTableViewController {
         didSet{
          loadItems()
             
-        tableView.rowHeight = 80.0
         }
     }
 
@@ -125,15 +124,12 @@ class ToDoListViewController: SwipeTableViewController {
        todoItems = selectedCategory?.items.sorted(byKeyPath: "dateCreated", ascending: true)
     
         tableView.reloadData()
-    
-    
-    
     }
     
     override func updateModel(at indexPath: IndexPath) {
         if let item = todoItems?[indexPath.row] {
             do {
-            try self.realm.write {
+                try self.realm.write {
                 self.realm.delete(item)
             }
         } catch {
@@ -142,6 +138,7 @@ class ToDoListViewController: SwipeTableViewController {
         
         }
 
+    }
 }
 
 //MARK: - Search bar methods
@@ -154,6 +151,7 @@ extension ToDoListViewController: UISearchBarDelegate {
         tableView.reloadData()
         
     }
+        
     
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -166,7 +164,7 @@ extension ToDoListViewController: UISearchBarDelegate {
         }
 
     }
-    }
 }
+
 
 
