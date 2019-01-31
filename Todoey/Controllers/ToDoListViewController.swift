@@ -9,7 +9,7 @@
 import UIKit
 import RealmSwift
 
-class ToDoListViewController: UITableViewController {
+class ToDoListViewController: SwipeTableViewController {
     
     var todoItems: Results<Item>?
     let realm = try! Realm()
@@ -17,8 +17,11 @@ class ToDoListViewController: UITableViewController {
     var selectedCategory : Category? {
         didSet{
          loadItems()
+            
+        tableView.rowHeight = 80.0
         }
     }
+
     
     
     override func viewDidLoad() {
@@ -37,8 +40,8 @@ class ToDoListViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
+
+        let cell = super.tableView( tableView, cellForRowAt: indexPath)
         
         if let item = todoItems?[indexPath.row] {
             
@@ -69,7 +72,6 @@ class ToDoListViewController: UITableViewController {
         
         tableView.reloadData()
     
-        
         tableView.deselectRow(at: indexPath, animated: true)
         
     }
@@ -127,10 +129,22 @@ class ToDoListViewController: UITableViewController {
     
     
     }
+    
+    override func updateModel(at indexPath: IndexPath) {
+        if let item = todoItems?[indexPath.row] {
+            do {
+            try self.realm.write {
+                self.realm.delete(item)
+            }
+        } catch {
+            print ("Error deleting item, \(error)")
+        }
+        
+        }
+
 }
 
 //MARK: - Search bar methods
-
 extension ToDoListViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -152,6 +166,7 @@ extension ToDoListViewController: UISearchBarDelegate {
         }
 
     }
-
+    }
 }
+
 
