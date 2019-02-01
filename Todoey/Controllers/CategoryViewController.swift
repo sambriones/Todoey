@@ -11,7 +11,7 @@ import RealmSwift
 import ChameleonFramework
 
 
-class CategoryViewController: SwipeTableViewController{
+class CategoryViewController: SwipeTableViewController {
     
     let realm = try! Realm()
     
@@ -23,10 +23,6 @@ class CategoryViewController: SwipeTableViewController{
     loadCategories()
         
     tableView.separatorStyle = .none
-        
-  
-        
-
     }
     
     
@@ -39,7 +35,7 @@ class CategoryViewController: SwipeTableViewController{
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
-        {
+        
             if let category = categories?[indexPath.row] {
                 
                 cell.textLabel?.text = category.name ?? "No Categories Added Yet"
@@ -48,7 +44,9 @@ class CategoryViewController: SwipeTableViewController{
             }
             
            return cell
-    }
+        }
+    
+        
     
     //Mark: - Tableview Delegate Methods
     
@@ -157,7 +155,7 @@ class CategoryViewController: SwipeTableViewController{
 
 }
 
-}
+
 
 
 
